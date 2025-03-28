@@ -2,8 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import { Inter } from 'next/font/google'
+import { createClient } from '@supabase/supabase-js'
 
 const inter = Inter({ subsets: ['latin'] })
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 export default function CADLandingPage() {
   const [formData, setFormData] = useState({
@@ -47,21 +54,22 @@ export default function CADLandingPage() {
     setSuccess(false)
 
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbzhIYn_mMZYMlyTR3e153-AV08gCTZB39_K_WXB-i_5_wdOVXTcosp2h7HuryBSkvCl/exec', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      const { error } = await supabase
+        .from('waitlist')
+        .insert([
+          {
+            email: formData.email,
+            name: formData.name,
+            use_case: formData.useCase
+          }
+        ])
 
-      if (!response.ok) {
-        throw new Error('Failed to submit form')
-      }
+      if (error) throw error
 
       setSuccess(true)
       setFormData({ email: '', name: '', useCase: '' })
     } catch (err) {
+      console.error('Submission error:', err)
       setError('Failed to submit form. Please try again.')
     } finally {
       setIsLoading(false)
@@ -124,7 +132,7 @@ export default function CADLandingPage() {
 
               <div className="space-y-1.5">
                 <label htmlFor="useCase" className="block font-medium text-white/80 text-sm">
-                  What use case do you want this for in your workflow? (Optional)
+                  How do you plan to use this in your work? (Optional)
                 </label>
                 <textarea
                   id="useCase"
