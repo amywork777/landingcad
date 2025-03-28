@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import './globals.css'
 
-export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+export const metadata = {
+  title: 'AI CAD',
+  description: 'AI-Powered CAD with fully editable parametric STEP files',
+  icons: {
+    icon: '/fishlogo.svg',
+    shortcut: '/fishlogo.svg',
+    apple: '/fishlogo.svg',
+  }
 }
 
 export default function RootLayout({
