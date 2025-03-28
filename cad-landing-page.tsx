@@ -42,7 +42,7 @@ export default function CADLandingPage() {
         setIsTyping(false)
         setShowFullImage(true)
       }
-    }, 150)
+    }, 50) // Even faster typing
 
     return () => clearInterval(interval)
   }, [])
@@ -204,7 +204,7 @@ export default function CADLandingPage() {
                 <div className="bg-white/5 rounded-lg p-3 md:p-4 text-white/80 text-base md:text-lg w-full">
                   {isTyping ? (
                     <>
-                      {text}<span className="animate-pulse">|</span>
+                      {text}<span className="animate-pulse inline-block ml-0.5 -translate-y-[2px]">▍</span>
                     </>
                   ) : (
                     text
@@ -213,15 +213,20 @@ export default function CADLandingPage() {
               </div>
 
               <div className="flex justify-center py-3 md:py-4">
-                <div className={`relative w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden transition-all duration-500 ${showImage ? 'opacity-100' : 'opacity-0'}`}>
+                <div className={`relative w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden transition-all duration-700 ${showImage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                   <img
                     src="/coffee-grinder.jpg"
                     alt="Coffee Grinder"
                     className="w-full h-full object-cover"
-                    style={{ objectPosition: '50% 95%' }}
+                    style={{ 
+                      objectPosition: '50% 95%'
+                    }}
                   />
                   <div 
-                    className={`absolute top-0 right-0 w-1/2 h-full bg-[#333333] transition-transform duration-500 ${showFullImage ? 'translate-x-full' : ''}`}
+                    className={`absolute top-0 right-0 w-1/2 h-full bg-[#333333] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.32,1)] ${showFullImage ? 'translate-x-full opacity-90' : 'opacity-100'}`}
+                    style={{
+                      boxShadow: '-12px 0 32px rgba(0,0,0,0.4)'
+                    }}
                   />
                 </div>
               </div>
