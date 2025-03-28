@@ -1,8 +1,5 @@
-import { Inter } from 'next/font/google'
 import type { Metadata } from 'next'
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -16,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={inter.className}>
-      <body>{children}</body>
+    <html lang="en" className="font-sans">
+      <body className="font-['-apple-system','SF_Pro_Text','SF_Pro_Icons','Helvetica_Neue','Helvetica','Arial','sans-serif']">{children}</body>
     </html>
   )
 }
