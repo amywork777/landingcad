@@ -49,6 +49,13 @@ export default function CADLandingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validate required fields
+    if (!formData.email.trim() || !formData.name.trim()) {
+      setError('Email and name are required')
+      return
+    }
+
     setIsLoading(true)
     setError('')
     setSuccess(false)
@@ -102,12 +109,13 @@ export default function CADLandingPage() {
             <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
               <div className="space-y-1.5">
                 <label htmlFor="email" className="block font-medium text-white/80 text-sm">
-                  Email
+                  Email *
                 </label>
                 <input
                   id="email"
                   name="email"
                   type="email"
+                  required
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="you@company.com"
@@ -117,12 +125,13 @@ export default function CADLandingPage() {
 
               <div className="space-y-1.5">
                 <label htmlFor="name" className="block font-medium text-white/80 text-sm">
-                  Name
+                  Name *
                 </label>
                 <input
                   id="name"
                   name="name"
                   type="text"
+                  required
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Your name"
