@@ -20,19 +20,27 @@ export default function CADLandingPage() {
   })
 
   const [text, setText] = useState('')
-  const fullText = 'Design a coffee grinder...'
+  const [showImage, setShowImage] = useState(false)
+  const [showFullImage, setShowFullImage] = useState(false)
+  const [isTyping, setIsTyping] = useState(true)
+  const fullText = 'Design a coffee grinder like this...'
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
+    // Start showing left half immediately
+    setShowImage(true)
+    
     let index = 0
     const interval = setInterval(() => {
       setText(fullText.slice(0, index))
       index++
       if (index > fullText.length) {
-        index = 0
+        clearInterval(interval)
+        setIsTyping(false)
+        setShowFullImage(true)
       }
     }, 150)
 
@@ -194,17 +202,26 @@ export default function CADLandingPage() {
                   </svg>
                 </div>
                 <div className="bg-white/5 rounded-lg p-3 md:p-4 text-white/80 text-base md:text-lg w-full">
-                  {text}<span className="animate-pulse">|</span>
+                  {isTyping ? (
+                    <>
+                      {text}<span className="animate-pulse">|</span>
+                    </>
+                  ) : (
+                    text
+                  )}
                 </div>
               </div>
 
               <div className="flex justify-center py-3 md:py-4">
-                <div className="relative w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden">
+                <div className={`relative w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden transition-all duration-500 ${showImage ? 'opacity-100' : 'opacity-0'}`}>
                   <img
                     src="/coffee-grinder.jpg"
                     alt="Coffee Grinder"
                     className="w-full h-full object-cover"
                     style={{ objectPosition: '50% 95%' }}
+                  />
+                  <div 
+                    className={`absolute top-0 right-0 w-1/2 h-full bg-[#333333] transition-transform duration-500 ${showFullImage ? 'translate-x-full' : ''}`}
                   />
                 </div>
               </div>
