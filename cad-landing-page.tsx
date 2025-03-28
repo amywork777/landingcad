@@ -15,6 +15,10 @@ export default function CADLandingPage() {
   const [text, setText] = useState('')
   const fullText = 'Design a coffee grinder...'
 
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
+
   useEffect(() => {
     let index = 0
     const interval = setInterval(() => {
@@ -36,9 +40,32 @@ export default function CADLandingPage() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
+    setIsLoading(true)
+    setError('')
+    setSuccess(false)
+
+    try {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbzhIYn_mMZYMlyTR3e153-AV08gCTZB39_K_WXB-i_5_wdOVXTcosp2h7HuryBSkvCl/exec', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form')
+      }
+
+      setSuccess(true)
+      setFormData({ email: '', name: '', useCase: '' })
+    } catch (err) {
+      setError('Failed to submit form. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -110,9 +137,21 @@ export default function CADLandingPage() {
                 />
               </div>
 
-              <button type="submit" className="w-full h-10 mt-2 text-sm text-white font-medium rounded-md bg-[#7bdbe6] hover:bg-[#7bdbe6]/90 transition-colors">
-                Join the waitlist
+              <button 
+                type="submit" 
+                disabled={isLoading}
+                className="w-full h-10 mt-2 text-sm text-white font-medium rounded-md bg-[#7bdbe6] hover:bg-[#7bdbe6]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? 'Submitting...' : 'Join the waitlist'}
               </button>
+
+              {error && (
+                <p className="mt-2 text-sm text-red-400">{error}</p>
+              )}
+
+              {success && (
+                <p className="mt-2 text-sm text-green-400">Successfully joined the waitlist!</p>
+              )}
 
               <p className="text-center text-xs text-white/40 mt-2">
                 By signing up, you agree to our terms and privacy policy.
@@ -143,12 +182,12 @@ export default function CADLandingPage() {
               </div>
 
               <div className="flex justify-center py-3 md:py-4">
-                <div className="relative h-64 md:h-[28rem] w-full rounded-2xl bg-[#1c1c1c] overflow-hidden">
-                  <img 
-                    src="/coffee-grinder.jpg" 
-                    alt="Coffee Grinder 3D Model" 
-                    className="w-full h-full object-cover" 
-                    style={{ objectPosition: '50% 65%' }}
+                <div className="relative w-full h-[200px] md:h-[400px] rounded-lg overflow-hidden">
+                  <img
+                    src="/coffee-grinder.jpg"
+                    alt="Coffee Grinder"
+                    className="w-full h-full object-cover"
+                    style={{ objectPosition: '50% 95%' }}
                   />
                 </div>
               </div>
